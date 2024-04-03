@@ -1,5 +1,6 @@
 package com.commerce.team.auth.ui;
 
+import com.commerce.team.global.dto.ApiResponse;
 import com.commerce.team.global.exception.RootCustomException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,16 @@ public class AuthControllerAdvice {
         String[] errorMessages = e.getFieldErrors().stream()
             .map(fieldError -> fieldError.getDefaultMessage())
             .toArray(String[]::new);
+        ApiResponse response = ApiResponse.of("입력 값을 확인해주세요.", errorMessages);
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
-            .body(errorMessages);
+            .body(response);
     }
 
     @ExceptionHandler(RootCustomException.class)
     public ResponseEntity rootCustomExceptionHandler(RootCustomException e) {
+        ApiResponse response = ApiResponse.of(e.getMessage(), null);
+
         return ResponseEntity
             .status(e.getStatusCode())
             .body(e.getMessage());

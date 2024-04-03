@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -57,8 +58,8 @@ class AuthControllerTest {
                     .contentType(APPLICATION_JSON)
             )
             .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$").value("회원 가입 완료"));
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.message").value("회원 가입 완료"));
     }
 
     @DisplayName("빈 객체를 입력할 경우 에러 메시지를 출력한다.")
@@ -78,8 +79,9 @@ class AuthControllerTest {
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$", Matchers.hasItems("이메일을 입력해주세요.","비밀번호를 입력해주세요.","이름을 입력해주세요.")));
+            .andExpect(jsonPath("$.message").value("입력 값을 확인해주세요."))
+            .andExpect(jsonPath("$.data").isArray())
+            .andExpect(jsonPath("$.data", Matchers.hasItems("이메일을 입력해주세요.", "비밀번호를 입력해주세요.", "이름을 입력해주세요.")));
     }
 
     @DisplayName("빈 값을 입력할 경우 에러 메시지를 출력한다.")
@@ -95,8 +97,6 @@ class AuthControllerTest {
         String json = objectMapper.writeValueAsString(request);
 
         // expected
-        String[] expectedValues = new String[]{"이메일을 입력해주세요.","비밀번호를 입력해주세요.","이름을 입력해주세요."};
-
         mockMvc.perform(
                 post("/auth/signup")
                     .content(json)
@@ -104,7 +104,8 @@ class AuthControllerTest {
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$", Matchers.hasItems("이메일을 입력해주세요.","비밀번호를 입력해주세요.","이름을 입력해주세요.")));
+            .andExpect(jsonPath("$.message").value("입력 값을 확인해주세요."))
+            .andExpect(jsonPath("$.data").isArray())
+            .andExpect(jsonPath("$.data", Matchers.hasItems("이메일을 입력해주세요.", "비밀번호를 입력해주세요.", "이름을 입력해주세요.")));
     }
 }
