@@ -12,6 +12,6 @@ public class UserAlreadyExistsException extends RootCustomException{
 
     @Override
     public int getStatusCode() {
-        return HttpStatus.BAD_REQUEST.value();
+        return HttpStatus.CONFLICT.value();
     }
 }

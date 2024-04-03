@@ -27,9 +27,8 @@ public class AuthControllerAdvice {
     @ExceptionHandler(RootCustomException.class)
     public ResponseEntity rootCustomExceptionHandler(RootCustomException e) {
         ApiResponse response = ApiResponse.of(e.getMessage(), null);
-
         return ResponseEntity
             .status(e.getStatusCode())
-            .body(e.getMessage());
+            .body(response);
     }
 }

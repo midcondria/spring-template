@@ -23,10 +23,9 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signup(@RequestBody @Valid NormalSignupRequest request) {
         authService.signup(request);
-        ApiResponse response = ApiResponse.ok("회원 가입 완료", null);
+        ApiResponse response = ApiResponse.of("회원 가입 완료", null);
         return ResponseEntity
             .status(CREATED)
             .body(response);
     }
-
 }

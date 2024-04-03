@@ -1,6 +1,7 @@
 package com.commerce.team.auth.ui;
 
 import com.commerce.team.auth.dto.NormalSignupRequest;
+import com.commerce.team.user.domain.User;
 import com.commerce.team.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
@@ -41,7 +42,7 @@ class AuthControllerTest {
 
     @DisplayName("올바른 정보 입력 시 회원가입에 성공한다.")
     @Test
-    void signupSuccessTest() throws Exception {
+    void signupSuccess() throws Exception {
         // given
         NormalSignupRequest request = NormalSignupRequest.builder()
             .name("나는짱")
@@ -54,8 +55,8 @@ class AuthControllerTest {
         // expected
         mockMvc.perform(
                 post("/auth/signup")
-                    .content(json)
                     .contentType(APPLICATION_JSON)
+                    .content(json)
             )
             .andDo(print())
             .andExpect(status().isCreated())
@@ -64,7 +65,7 @@ class AuthControllerTest {
 
     @DisplayName("빈 객체를 입력할 경우 에러 메시지를 출력한다.")
     @Test
-    void signupFailTestWithNoData() throws Exception {
+    void signupFailsWhenNoData() throws Exception {
         // given
         NormalSignupRequest request = NormalSignupRequest.builder()
             .build();
@@ -74,8 +75,8 @@ class AuthControllerTest {
         // expected
         mockMvc.perform(
                 post("/auth/signup")
-                    .content(json)
                     .contentType(APPLICATION_JSON)
+                    .content(json)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -86,7 +87,7 @@ class AuthControllerTest {
 
     @DisplayName("빈 값을 입력할 경우 에러 메시지를 출력한다.")
     @Test
-    void signupFailTestWithEmptyData() throws Exception {
+    void signupFailsWhenEmptyData() throws Exception {
         // given
         NormalSignupRequest request = NormalSignupRequest.builder()
             .name("")
@@ -99,13 +100,41 @@ class AuthControllerTest {
         // expected
         mockMvc.perform(
                 post("/auth/signup")
-                    .content(json)
                     .contentType(APPLICATION_JSON)
+                    .content(json)
             )
             .andDo(print())
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.message").value("입력 값을 확인해주세요."))
             .andExpect(jsonPath("$.data").isArray())
             .andExpect(jsonPath("$.data", Matchers.hasItems("이메일을 입력해주세요.", "비밀번호를 입력해주세요.", "이름을 입력해주세요.")));
+    }
+
+    @DisplayName("중복된 이메일일 경우 에러 메시지를 출력한다.")
+    @Test
+    void signupFailsWhenEmailAlreadyExists() throws Exception {
+        // given
+        User user = User.builder()
+            .name("나는짱")
+            .email("midcon@nav.com")
+            .password("asd123123")
+            .build();
+        userRepository.save(user);
+
+        NormalSignupRequest request = NormalSignupRequest.builder()
+            .name("나는짱")
+            .email("midcon@nav.com")
+            .password("1234")
+            .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        // expected
+        mockMvc.perform(post("/auth/signup")
+                .contentType(APPLICATION_JSON)
+                .content(json))
+            .andDo(print())
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.message").value("이미 존재하는 유저입니다."));
     }
 }
