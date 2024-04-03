@@ -1,4 +1,4 @@
-package com.commerce.team.user.dto;
+package com.commerce.team.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @ToString
-public class UserSignupRequest {
+public class NormalSignupRequest {
 
     @NotBlank(message = "이메일을 입력해주세요.")
     private String email;
@@ -21,7 +21,7 @@ public class UserSignupRequest {
     private String name;
 
     @Builder
-    public UserSignupRequest(String name, String email, String password) {
+    public NormalSignupRequest(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;

@@ -1,4 +1,4 @@
-package com.commerce.team.user.ui;
+package com.commerce.team.auth.ui;
 
 import com.commerce.team.global.exception.RootCustomException;
 import org.springframework.http.HttpStatus;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class UserControllerAdvice {
+public class AuthControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
