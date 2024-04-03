@@ -1,6 +1,6 @@
 package com.commerce.team;
 
-import com.commerce.team.auth.application.AppConfig;
+import com.commerce.team.global.config.AppConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

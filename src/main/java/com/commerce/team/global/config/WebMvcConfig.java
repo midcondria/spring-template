@@ -1,6 +1,5 @@
 package com.commerce.team.global.config;
 
-import com.commerce.team.auth.application.AppConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
