@@ -29,7 +29,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
+	// 아임포트
 	implementation("com.github.iamport:iamport-rest-client-java:0.2.23")
+
+	// 웹소켓
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
 
 	// JWT
 	implementation("io.jsonwebtoken:jjwt-api:0.12.0")

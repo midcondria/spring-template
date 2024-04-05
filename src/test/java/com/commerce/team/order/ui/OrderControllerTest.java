@@ -24,7 +24,7 @@ class OrderControllerTest {
     @Autowired
     private OrderController orderController;
 
-    @DisplayName("")
+    @DisplayName("아임포트 연동 테스트")
     @Test
     void test() throws Exception {
         // given
