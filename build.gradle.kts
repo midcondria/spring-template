@@ -36,9 +36,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
 
 	// JWT
-	implementation("io.jsonwebtoken:jjwt-api:0.12.0")
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.0")
-	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.0")
+	implementation("io.jsonwebtoken:jjwt-api:0.12.1")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.1")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.1")
 
 	implementation("org.springframework.security:spring-security-crypto")
 	implementation("org.bouncycastle:bcprov-jdk15on:1.70")
