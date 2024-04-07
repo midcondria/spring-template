@@ -1,14 +1,18 @@
 package com.commerce.team.auth.application;
 
 import com.commerce.team.auth.domain.PasswordEncoder;
+import com.commerce.team.global.config.AppConfig;
 import com.commerce.team.global.exception.UserAlreadyExistsException;
 import com.commerce.team.user.domain.User;
 import com.commerce.team.auth.dto.NormalSignupRequest;
 import com.commerce.team.user.repository.UserRepository;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.crypto.SecretKey;
+import java.util.Date;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -16,6 +20,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AuthService {
 
+    private final AppConfig appConfig;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -27,7 +32,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void signup(NormalSignupRequest request) {
+    public String signup(NormalSignupRequest request) {
         checkEmailDuplicate(request.getEmail());
 
         String encryptedPassword = passwordEncoder.encrypt(request.getPassword());
@@ -38,5 +43,16 @@ public class AuthService {
             .build();
 
         userRepository.save(user);
+        return generateAccessToken(request.getName(), new Date());
+    }
+
+    private String generateAccessToken(String name, Date dateTime) {
+        SecretKey secretKey = appConfig.getSecretKey();
+        return Jwts.builder()
+            .subject(name)
+            .issuedAt(dateTime)
+            .expiration(new Date(dateTime.getTime() + 36000L))
+            .signWith(secretKey)
+            .compact();
     }
 }
