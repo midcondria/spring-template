@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -40,7 +41,7 @@ class AuthControllerTest {
         userRepository.deleteAll();
     }
 
-    @DisplayName("올바른 정보 입력 시 회원가입에 성공한다.")
+    @DisplayName("올바른 정보 입력 시 회원가입에 성공하고 쿠키에 jwt를 담아 보낸다.")
     @Test
     void signupSuccess() throws Exception {
         // given
@@ -60,6 +61,10 @@ class AuthControllerTest {
             )
             .andDo(print())
             .andExpect(status().isCreated())
+            .andExpect(header().exists("Set-Cookie"))
+            .andExpect(header().string("Set-Cookie", containsString("Max-Age="))) // 유효기간 확인
+            .andExpect(header().string("Set-Cookie", containsString("Domain=localhost"))) // 도메인 확인
+            .andExpect(header().string("Set-Cookie", containsString("jwt=")))
             .andExpect(jsonPath("$.message").value("회원 가입 완료"));
     }
 
