@@ -15,7 +15,17 @@ jobs:
       uses: actions/setup-java@v4
       with:
         java-version: '17'
-        distribution: 'temurin'    
+        distribution: 'temurin'  
+
+    ## application.yml 파일 생성
+    - name: make application.yml
+      run: |
+        echo ">> mkdir & touch"
+        mkdir -p ./src/main/resources
+        cd ./src/main/resources
+        touch ./application.yml
+        echo ">> copy application.yml"
+        echo "${{ secrets.PROPERTIES }}" >> ./application.yml
         
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
