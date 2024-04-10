@@ -7,6 +7,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +36,9 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity logout() {
+//        Sort by = Sort.by(Sort.Direction.DESC);
+//        Pageable of = PageRequest.of(1, 2, by);
+
         ResponseCookie cookie = ResponseCookie.from("jwt", "expired")
             .domain("localhost")   // todo 서버 환경에 따라 설정파일로 분리해서 관리하자.
             .path("/")
