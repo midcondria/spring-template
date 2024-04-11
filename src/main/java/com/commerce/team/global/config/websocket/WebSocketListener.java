@@ -1,4 +1,4 @@
-package com.commerce.team.global.config;
+package com.commerce.team.global.config.websocket;
 
 import com.commerce.team.chat.domain.ChatMessage;
 import com.commerce.team.chat.domain.MessageType;

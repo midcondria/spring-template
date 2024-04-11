@@ -1,5 +1,6 @@
-package com.commerce.team.global.config;
+package com.commerce.team.global.config.websocket;
 
+import com.commerce.team.global.config.AppConfig;
 import com.siot.IamportRestClient.App;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
