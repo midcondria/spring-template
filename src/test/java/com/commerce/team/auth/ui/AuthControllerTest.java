@@ -1,6 +1,7 @@
 package com.commerce.team.auth.ui;
 
 import com.commerce.team.auth.dto.NormalSignupRequest;
+import com.commerce.team.global.config.security.CustomWithMockUser;
 import com.commerce.team.user.domain.User;
 import com.commerce.team.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
@@ -92,6 +94,7 @@ class AuthControllerTest {
 
     @DisplayName("빈 값을 입력할 경우 에러 메시지를 출력한다.")
     @Test
+    @WithMockUser
     void signupFailsWhenEmptyData() throws Exception {
         // given
         NormalSignupRequest request = NormalSignupRequest.builder()
@@ -117,6 +120,7 @@ class AuthControllerTest {
 
     @DisplayName("중복된 이메일일 경우 에러 메시지를 출력한다.")
     @Test
+    @CustomWithMockUser
     void signupFailsWhenEmailAlreadyExists() throws Exception {
         // given
         User user = User.builder()

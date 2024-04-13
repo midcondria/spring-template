@@ -4,6 +4,7 @@ import com.commerce.team.global.config.security.filter.EmailPasswordAuthFilter;
 import com.commerce.team.global.config.security.handler.Http401Handler;
 import com.commerce.team.global.config.security.handler.Http403Handler;
 import com.commerce.team.global.config.security.handler.LoginFailHandler;
+import com.commerce.team.global.config.security.handler.LoginSuccessHandler;
 import com.commerce.team.user.domain.User;
 import com.commerce.team.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -31,6 +33,7 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
+@EnableMethodSecurity
 @EnableWebSecurity(debug = true) // TODO: 운영 환경에선 제거
 @Slf4j
 @RequiredArgsConstructor
@@ -53,8 +56,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/auth/login").permitAll()
                 .requestMatchers("/auth/signup").permitAll()
-                .requestMatchers("/users").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/users/admin").hasRole("ADMIN")
+//                .requestMatchers("/users").hasAnyRole("USER", "ADMIN")
+//                .requestMatchers("/users/admin").hasRole("ADMIN")
 //                .access(new WebExpressionAuthorizationManager("hasRole('ADMIN') AND hasAuthority('WRITE')"))
                 .anyRequest().authenticated()
             )
@@ -83,9 +86,8 @@ public class SecurityConfig {
     public EmailPasswordAuthFilter usernamePasswordAuthenticationFilter() {
         EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login", objectMapper);
         filter.setAuthenticationManager(authenticationManager());
-        filter.setAuthenticationSuccessHandler(new SimpleUrlAuthenticationSuccessHandler("/auth"));
+        filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper));
         filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
-        filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
         rememberMeServices.setAlwaysRemember(true);

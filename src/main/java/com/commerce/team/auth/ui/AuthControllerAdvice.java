@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Collections;
+import java.util.HashMap;
+
 @RestControllerAdvice
 public class AuthControllerAdvice {
 
@@ -26,7 +29,7 @@ public class AuthControllerAdvice {
 
     @ExceptionHandler(RootCustomException.class)
     public ResponseEntity rootCustomExceptionHandler(RootCustomException e) {
-        ApiResponse response = ApiResponse.of(e.getMessage(), null);
+        ApiResponse response = ApiResponse.of(e.getMessage(), new HashMap<>());
         return ResponseEntity
             .status(e.getStatusCode())
             .body(response);

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
@@ -27,6 +28,8 @@ public class AuthController {
 
     private final AuthService authService;
 
+    // Spring EL
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping
     public String test(HttpServletRequest request) {
         log.info("메인 페이지 접속");
