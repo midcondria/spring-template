@@ -30,6 +30,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
+	// AWS SDK
+	implementation(platform("software.amazon.awssdk:bom:2.25.35"))
+	implementation("software.amazon.awssdk:s3")
+
 	// 스프링 시큐리티
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.security:spring-security-test")
