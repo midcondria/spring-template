@@ -54,12 +54,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/auth/login").permitAll()
-                .requestMatchers("/auth/signup").permitAll()
+                    .requestMatchers("/auth/login").permitAll()
+                    .requestMatchers("/auth/signup").permitAll()
+                    .requestMatchers("/**").permitAll()
 //                .requestMatchers("/users").hasAnyRole("USER", "ADMIN")
 //                .requestMatchers("/users/admin").hasRole("ADMIN")
 //                .access(new WebExpressionAuthorizationManager("hasRole('ADMIN') AND hasAuthority('WRITE')"))
-                .anyRequest().authenticated()
+                    .anyRequest().authenticated()
             )
 //            .formLogin(form -> form
 //                .loginPage("/auth/login")
