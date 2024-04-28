@@ -4,13 +4,18 @@ import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
 public class ChatMessage {
 
     private String content;
     private String sender;
     private MessageType type;
+
+    @Builder
+    public ChatMessage(String content, String sender, MessageType type) {
+        this.content = content;
+        this.sender = sender;
+        this.type = type;
+    }
 }
