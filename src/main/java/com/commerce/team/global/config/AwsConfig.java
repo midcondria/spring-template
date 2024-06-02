@@ -3,15 +3,11 @@ package com.commerce.team.global.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedAbortMultipartUploadRequest;
-
-import java.net.URI;
 
 @RequiredArgsConstructor
 @ConfigurationProperties(prefix = "aws")
@@ -19,12 +15,7 @@ public class AwsConfig {
 
     private final String accessKey;
     private final String secretKey;
-    private final String s3BucketName;
     private final String s3AccessPoint;
-
-    public String getS3BucketName() {
-        return s3BucketName;
-    }
 
     public String getS3AccessPoint() {
         return s3AccessPoint;
