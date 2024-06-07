@@ -99,3 +99,7 @@ tasks.named("clean") {
 		file(querydslDir).delete()
 	}
 }
+
+tasks.jar{
+	enabled = false
+}
