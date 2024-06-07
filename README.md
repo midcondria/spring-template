@@ -5,3 +5,4 @@
 - 이메일 인증용 메일 전송 연습
 - GitHub Actions, CodeDeploy를 이용한 CI/CD 연습
   + Nginx를 이용한 무중단 배포 연습
+- 스프링 액추에이터를 이용한 메트릭 확인
