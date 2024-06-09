@@ -6,3 +6,4 @@
 - GitHub Actions, CodeDeploy를 이용한 CI/CD 연습
   + Nginx를 이용한 무중단 배포 연습
 - 스프링 액추에이터를 이용한 메트릭 확인
+  - 프로메테우스 + 그라파나를 이용한 모니터링
