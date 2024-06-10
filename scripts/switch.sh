@@ -17,12 +17,12 @@ else
     exit 1
 fi
 
-# $ service_url.inc 파일에 적힌 서비스 주소를 새로 띄운 서버의 주소로 변경
+# service_url.inc 파일에 적힌 서비스 주소를 새로 띄운 서버의 주소로 변경
 echo "set \$service_url http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/service_url.inc
 
 echo "> Now Nginx proxies to ${TARGET_PORT}."
 
-# nginx를 reload 해준다.
+# service_url이 변경됐으므로 nginx를 reload 해줌
 sudo service nginx reload
 
 echo "> Nginx reloaded."
