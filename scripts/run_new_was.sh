@@ -4,7 +4,7 @@
 
 # 환경 변수 설정
 PROJECT_ROOT="/home/ubuntu/app" # 프로젝트 루트
-JAR_FILE="$PROJECT_ROOT/build/libs/pawland-0.0.1-SNAPSHOT.jar" # 빌드해서 생성된 jar 파일명
+JAR_FILE="$PROJECT_ROOT/build/libs/team-0.0.1-SNAPSHOT.jar" # 빌드해서 생성된 jar 파일명
 
 # service_url.inc 에서 현재 서비스 중인 WAS의 포트 번호 확인
 CURRENT_PORT=$(cat /home/ubuntu/service_url.inc | grep -Po '[0-9]+' | tail -1)
