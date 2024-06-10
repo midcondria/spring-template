@@ -4,6 +4,12 @@ on:
   pull_request:
     branches: [ "main" ]
 
+env:
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_NAME: midcondria-cicd
+  CODE_DEPLOY_APPLICATION_NAME: midcon-codedeploy-app
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: midcon-codedeploy-deploy-group
+
 jobs:
   build:
 
@@ -34,3 +40,30 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew build
       shell: bash
+
+    - name: Make zip file
+      run: zip -r ./myapplication.zip AppSpec.yml scripts/ team-0.0.1-SNAPSHOT.jar
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Upload to AWS S3
+      run: |
+        aws deploy push \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --ignore-hidden-files \
+          --s3-location s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip \
+          --source ./myapplication.zip
+
+    - name: Deploy to AWS EC2 from S3
+      run: |
+        aws deploy create-deployment \
+          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --deployment-config-name CodeDeployDefault.AllAtOnce \
+          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
