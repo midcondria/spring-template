@@ -31,4 +31,17 @@ echo "> Nginx reloaded."
 # -15 SIGTERM  안전 종료인 SIGTERM을 사용하여 이전 포트 프로세스를 제거한다.
 CURRENT_PID=$(lsof -Fp -i TCP:${CURRENT_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
 
-sudo kill -15 ${CURRENT_PID}
+if [ -z "$CURRENT_PID" ]; then
+    echo "> No process found on port ${CURRENT_PORT}."
+else
+    echo "> Killing process ${CURRENT_PID} on port ${CURRENT_PORT}."
+    sudo kill -15 ${CURRENT_PID}
+
+    # kill 명령이 실패했는지 확인
+    if [ $? -eq 0 ]; then
+        echo "> Process ${CURRENT_PID} successfully terminated."
+    else
+        echo "> Failed to terminate process ${CURRENT_PID}."
+        exit 1
+    fi
+fi
