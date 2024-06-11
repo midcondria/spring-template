@@ -12,12 +12,14 @@ TARGET_PORT=0
 
 echo "> Current port of running WAS is ${CURRENT_PORT}."
 
+# 서비스 중인 포트가 8081이면 8082 포트로 배포
+# 서비스 중인 포트가 8082이면 8081 포트로 배포
 if [ ${CURRENT_PORT} -eq 8081 ]; then
-  TARGET_PORT=8082 # 현재 포트가 8081이면 8082로 배포
+  TARGET_PORT=8082
 elif [ ${CURRENT_PORT} -eq 8082 ]; then
-  TARGET_PORT=8081 # 현재 포트가 8082라면 8081로 배포
+  TARGET_PORT=8081
 else
-  echo "> Not connected to nginx" # nginx가 실행되고 있지 않다면 에러 코드
+  echo "> Any WAS is connected to nginx" # 애플리케이션이 실행되고 있지 않음
 fi
 
 # 타겟 포트 번호로 실행 중인 프로세스가 있는지 확인
@@ -29,7 +31,7 @@ if [ ! -z ${TARGET_PID} ]; then
   sudo kill ${TARGET_PID}
 fi
 
-# 타켓 포트에 jar파일을 이용해 새로운 서버 실행
+# jar파일을 이용해 타켓 포트에 새로운 서버 실행
 nohup java -jar -Dserver.port=${TARGET_PORT} ${JAR_FILE} > /home/ubuntu/nohup.out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0

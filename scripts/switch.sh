@@ -17,12 +17,12 @@ else
     exit 1
 fi
 
-# $ service_url.inc 파일에 적힌 서비스 주소를 새로 띄운 서버의 주소로 변경
+# service_url.inc 파일에 적힌 서비스 주소를 새로 띄운 서버의 주소로 변경
 echo "set \$service_url http://127.0.0.1:${TARGET_PORT};" | tee /home/ubuntu/service_url.inc
 
 echo "> Now Nginx proxies to ${TARGET_PORT}."
 
-# nginx를 reload 해준다.
+# service_url이 변경됐으므로 nginx를 reload 해줌
 sudo service nginx reload
 
 echo "> Nginx reloaded."
@@ -31,4 +31,17 @@ echo "> Nginx reloaded."
 # -15 SIGTERM  안전 종료인 SIGTERM을 사용하여 이전 포트 프로세스를 제거한다.
 CURRENT_PID=$(lsof -Fp -i TCP:${CURRENT_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
 
-sudo kill -15 ${CURRENT_PID}
+if [ -z "$CURRENT_PID" ]; then
+    echo "> No process found on port ${CURRENT_PORT}."
+else
+    echo "> Killing process ${CURRENT_PID} on port ${CURRENT_PORT}."
+    sudo kill -15 ${CURRENT_PID}
+
+    # kill 명령이 실패했는지 확인
+    if [ $? -eq 0 ]; then
+        echo "> Process ${CURRENT_PID} successfully terminated."
+    else
+        echo "> Failed to terminate process ${CURRENT_PID}."
+        exit 1
+    fi
+fi
