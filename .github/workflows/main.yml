@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: CI/CD with S3 and CodeDeploy
 
 on:
   pull_request:
